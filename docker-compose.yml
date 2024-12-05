@@ -1,0 +1,47 @@
+version: '3.8'
+services:
+  redis-db:
+    image: redis:latest
+    restart: always
+    container_name: redis-db
+    ports:
+      - "${REDIS_PORT}:6379"
+    command:
+      - redis-server
+      - --save
+      - "20 1"
+      - --loglevel
+      - warning
+      - --requirepass
+      - ${REDIS_PASSWORD}
+      - --appendonly
+      - "yes"
+    privileged: true
+    volumes:
+      - redis_data:/data
+    environment:
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+
+  redis-api:
+    build:
+      context: ./api
+    container_name: redis-api
+    ports:
+      - "${API_PORT}:8000"
+    volumes:
+      - ./api:/app
+    depends_on:
+      - redis-db
+    environment:
+      - PIP_INDEX_URL=${PIP_INDEX_URL}
+      - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PORT=${REDIS_PORT}
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+
+volumes:
+  redis_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ${REDIS_DATA_PATH}

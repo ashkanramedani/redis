@@ -1,0 +1,11 @@
+
+/.venv
+/__pycache__
+/home
+/libs/__pycache__
+/config
+/data
+/api/libs/__pycache__
+/api/__pycache__
+.env
+/api/config

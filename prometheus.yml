@@ -1,0 +1,7 @@
+global:
+  scrape_interval: 15s  # هر 15 ثانیه داده‌ها را جمع‌آوری کن
+
+scrape_configs:
+  - job_name: 'redis_api'
+    static_configs:
+      - targets: ['localhost:8888']  # آدرس FastAPI (در محیط لوکال)

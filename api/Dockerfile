@@ -9,7 +9,7 @@ COPY requirements.txt .
 
 
 # Configure pip to use the local repository and fallback to PyPI
-RUN mkdir ~/.pip && echo "[global]\nfind-links = http://185.112.32.51:5000\nindex-url = https://pypi.org/simple" > ~/.pip/pip.conf
+RUN mkdir ~/.pip && echo "[global]\nfind-links = http://pip-repo:5000\nindex-url = https://pypi.org/simple" > ~/.pip/pip.conf
 
 
 RUN pip install --no-cache-dir -r requirements.txt

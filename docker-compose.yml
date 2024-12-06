@@ -18,9 +18,15 @@ services:
       - "yes"
     privileged: true
     volumes:
-      - redis_data:/data
+      - ${REDIS_DATA_PATH}:/data
     environment:
-      - REDIS_PASSWORD=${REDIS_PASSWORD}
+      - REDIS_PASSWORD=${REDIS_PASSWORD}      
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.redis-db.rule=Host(`redis-db`)"
+      - "traefik.http.services.redis-db.loadbalancer.server.port=${REDIS_PORT}"
+    networks:
+      - ieltsdaily
 
   redis-api:
     build:
@@ -37,11 +43,13 @@ services:
       - REDIS_HOST=${REDIS_HOST}
       - REDIS_PORT=${REDIS_PORT}
       - REDIS_PASSWORD=${REDIS_PASSWORD}
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.redis-api.rule=Host(`redis-api`)"
+      - "traefik.http.services.redis-api.loadbalancer.server.port=${API_PORT}"
+    networks:
+      - ieltsdaily
 
-volumes:
-  redis_data:
-    driver: local
-    driver_opts:
-      type: none
-      o: bind
-      device: ${REDIS_DATA_PATH}
+networks:
+  ieltsdaily:
+    external: true

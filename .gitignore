@@ -9,3 +9,4 @@
 /api/__pycache__
 .env
 /api/config
+api/api.log
